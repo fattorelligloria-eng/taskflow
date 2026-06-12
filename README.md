@@ -8,7 +8,7 @@ Você cria tarefas, atribui pra usuários, e o sistema faz o gerenciamento no ba
 
 Tecnologias
 
-Java, Maven, SQLite, Eclipse JEE. Bem direto.
+Java, Maven, SQLite, Eclipse JEE. 
 
 
  Pra rodar
@@ -23,16 +23,6 @@ mvn exec:java -Dexec.mainClass="com.taskflow.Main"
 
 Ou só abre no Eclipse e roda direto.
 
- Estrutura
-
-src/
-├── java/com/taskflow/
-│   ├── Main.java
-│   ├── Task.java
-│   ├── User.java
-│   ├── TaskManager.java
-│   └── DatabaseManager.java
-```
 
 Cada classe tem sua responsabilidade. Task cuida da tarefas, User cuida dos usuários, TaskManager orquestra tudo, DatabaseManager faz a conexão com o SQLite.
 
