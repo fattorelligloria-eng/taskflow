@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Estatísticas - TaskFlow</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #1e1e2e; color: #cdd6f4; min-height: 100vh; }
+        header { background: #313244; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #45475a; }
+        .logo { font-size: 22px; font-weight: bold; color: #cba6f7; }
+        nav a { color: #cdd6f4; text-decoration: none; margin-left: 24px; font-size: 14px; }
+        nav a:hover { color: #cba6f7; }
+        .container { max-width: 900px; margin: 40px auto; padding: 0 24px; }
+        h2 { font-size: 22px; margin-bottom: 24px; color: #cba6f7; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+        .stat-card { background: #313244; border-radius: 12px; padding: 24px; text-align: center; }
+        .stat-card .numero { font-size: 48px; font-weight: bold; margin-bottom: 8px; }
+        .stat-card .label { font-size: 14px; color: #a6adc8; }
+        .total .numero { color: #cba6f7; }
+        .pendente .numero { color: #fab387; }
+        .concluida .numero { color: #a6e3a1; }
+        .urgencias { background: #313244; border-radius: 12px; padding: 24px; }
+        .urgencias h3 { font-size: 16px; margin-bottom: 20px; color: #a6adc8; }
+        .urgencia-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .urgencia-info { display: flex; align-items: center; gap: 12px; }
+        .urgencia-badge { padding: 4px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; min-width: 130px; text-align: center; }
+        .badge-muito-urgente { background: #f38ba822; color: #f38ba8; }
+        .badge-urgente { background: #fab38722; color: #fab387; }
+        .badge-normal { background: #89b4fa22; color: #89b4fa; }
+        .badge-pouco-urgente { background: #a6e3a122; color: #a6e3a1; }
+        .badge-nada-urgente { background: #a6adc822; color: #a6adc8; }
+        .progress-bar { flex: 1; height: 8px; background: #45475a; border-radius: 4px; margin: 0 16px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 4px; }
+        .fill-muito-urgente { background: #f38ba8; }
+        .fill-urgente { background: #fab387; }
+        .fill-normal { background: #89b4fa; }
+        .fill-pouco-urgente { background: #a6e3a1; }
+        .fill-nada-urgente { background: #a6adc8; }
+        .urgencia-count { font-size: 18px; font-weight: bold; min-width: 30px; text-align: right; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 24px; }
+        .btn-purple { background: #cba6f7; color: #1e1e2e; }
+        .btn:hover { opacity: 0.85; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">🚀 TaskFlow</div>
+    <nav>
+        <a th:href="@{/}">Tarefas</a>
+        <a th:href="@{/estatisticas}">Estatísticas</a>
+        <a th:href="@{/login}">Login</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>📊 Estatísticas</h2>
+
+    <div class="stats-grid">
+        <div class="stat-card total">
+            <div class="numero" th:text="${total}">0</div>
+            <div class="label">Total de tarefas</div>
+        </div>
+        <div class="stat-card pendente">
+            <div class="numero" th:text="${pendentes}">0</div>
+            <div class="label">Pendentes</div>
+        </div>
+        <div class="stat-card concluida">
+            <div class="numero" th:text="${concluidas}">0</div>
+            <div class="label">Concluídas</div>
+        </div>
+    </div>
+
+    <div class="urgencias">
+        <h3>Distribuição por urgência</h3>
+
+        <div class="urgencia-item">
+            <div class="urgencia-info">
+                <span class="urgencia-badge badge-muito-urgente">🔴 Muito Urgente</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill fill-muito-urgente"
+                     th:style="'width: ' + (${total} > 0 ? (${muitoUrgentes} * 100 / ${total}) : 0) + '%'"></div>
+            </div>
+            <span class="urgencia-count" th:text="${muitoUrgentes}">0</span>
+        </div>
+
+        <div class="urgencia-item">
+            <div class="urgencia-info">
+                <span class="urgencia-badge badge-urgente">🟠 Urgente</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill fill-urgente"
+                     th:style="'width: ' + (${total} > 0 ? (${urgentes} * 100 / ${total}) : 0) + '%'"></div>
+            </div>
+            <span class="urgencia-count" th:text="${urgentes}">0</span>
+        </div>
+
+        <div class="urgencia-item">
+            <div class="urgencia-info">
+                <span class="urgencia-badge badge-normal">🔵 Normal</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill fill-normal"
+                     th:style="'width: ' + (${total} > 0 ? (${normais} * 100 / ${total}) : 0) + '%'"></div>
+            </div>
+            <span class="urgencia-count" th:text="${normais}">0</span>
+        </div>
+
+        <div class="urgencia-item">
+            <div class="urgencia-info">
+                <span class="urgencia-badge badge-pouco-urgente">🟢 Pouco Urgente</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill fill-pouco-urgente"
+                     th:style="'width: ' + (${total} > 0 ? (${poucoUrgentes} * 100 / ${total}) : 0) + '%'"></div>
+            </div>
+            <span class="urgencia-count" th:text="${poucoUrgentes}">0</span>
+        </div>
+
+        <div class="urgencia-item">
+            <div class="urgencia-info">
+                <span class="urgencia-badge badge-nada-urgente">⚪ Nada Urgente</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill fill-nada-urgente"
+                     th:style="'width: ' + (${total} > 0 ? (${nadaUrgentes} * 100 / ${total}) : 0) + '%'"></div>
+            </div>
+            <span class="urgencia-count" th:text="${nadaUrgentes}">0</span>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="btn btn-purple">← Voltar para tarefas</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #1e1e2e; color: #cdd6f4; min-height: 100vh; }
+        header { background: #313244; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #45475a; }
+        .logo { font-size: 22px; font-weight: bold; color: #cba6f7; }
+        nav a { color: #cdd6f4; text-decoration: none; margin-left: 24px; font-size: 14px; }
+        nav a:hover { color: #cba6f7; }
+        .container { max-width: 1100px; margin: 32px auto; padding: 0 24px; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+        .stat-card { background: #313244; border-radius: 12px; padding: 20px; }
+        .stat-card p:first-child { font-size: 12px; color: #a6adc8; margin-bottom: 8px; }
+        .stat-card p:last-child { font-size: 28px; font-weight: bold; }
+        .stat-card.total p:last-child { color: #cba6f7; }
+        .stat-card.urgente p:last-child { color: #f38ba8; }
+        .stat-card.pendente p:last-child { color: #fab387; }
+        .stat-card.concluida p:last-child { color: #a6e3a1; }
+        .actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; text-decoration: none; display: inline-block; }
+        .btn-green { background: #a6e3a1; color: #1e1e2e; }
+        .btn-blue { background: #89b4fa; color: #1e1e2e; }
+        .btn-red { background: #f38ba8; color: #1e1e2e; }
+        .btn:hover { opacity: 0.85; }
+        table { width: 100%; border-collapse: collapse; background: #313244; border-radius: 12px; overflow: hidden; }
+        th { background: #45475a; padding: 14px 16px; text-align: left; font-size: 13px; color: #a6adc8; }
+        td { padding: 14px 16px; border-top: 1px solid #45475a; font-size: 14px; }
+        .badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+        .badge-muito-urgente { background: #f38ba822; color: #f38ba8; }
+        .badge-urgente { background: #fab38722; color: #fab387; }
+        .badge-normal { background: #89b4fa22; color: #89b4fa; }
+        .badge-pouco-urgente { background: #a6e3a122; color: #a6e3a1; }
+        .badge-nada-urgente { background: #a6adc822; color: #a6adc8; }
+        .badge-pendente { background: #fab38722; color: #fab387; }
+        .badge-concluida { background: #a6e3a122; color: #a6e3a1; }
+        .acoes { display: flex; gap: 8px; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">🚀 TaskFlow</div>
+    <nav>
+        <a th:href="@{/}">Tarefas</a>
+        <a th:href="@{/estatisticas}">Estatísticas</a>
+        <a th:href="@{/login}">Login</a>
+        <a th:href="@{/cadastro}">Cadastro</a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="stats">
+        <div class="stat-card total">
+            <p>Total de tarefas</p>
+            <p th:text="${totalTarefas}">0</p>
+        </div>
+        <div class="stat-card urgente">
+            <p>Muito urgentes</p>
+            <p th:text="${muitoUrgentes}">0</p>
+        </div>
+        <div class="stat-card pendente">
+            <p>Pendentes</p>
+            <p th:text="${pendentes}">0</p>
+        </div>
+        <div class="stat-card concluida">
+            <p>Concluídas</p>
+            <p th:text="${concluidas}">0</p>
+        </div>
+    </div>
+
+    <div class="actions">
+        <h2>Lista de Tarefas</h2>
+        <a th:href="@{/adicionar}" class="btn btn-green">+ Adicionar Tarefa</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Urgência</th>
+                <th>Horário</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="task : ${tarefas}">
+                <td th:text="${task.titulo}">Título</td>
+                <td>
+                    <span class="badge badge-normal" th:text="${task.ordemUrgencia}">Urgência</span>
+                </td>
+                <td th:text="${task.horarioInicio} + ' - ' + ${task.horarioFim}">Horário</td>
+                <td>
+                    <span th:class="${task.statusConcluida} ? 'badge badge-concluida' : 'badge badge-pendente'"
+                          th:text="${task.statusConcluida} ? 'Concluída' : 'Pendente'">Status</span>
+                </td>
+                <td class="acoes">
+                    <form th:action="@{/concluir/{id}(id=${task.id})}" method="post">
+                        <button class="btn-sm btn-green" type="submit">✅</button>
+                    </form>
+                    <a th:href="@{/editar/{id}(id=${task.id})}" class="btn-sm btn-blue" style="text-decoration:none;">✏️</a>
+                    <form th:action="@{/deletar/{id}(id=${task.id})}" method="post">
+                        <button class="btn-sm btn-red" type="submit">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

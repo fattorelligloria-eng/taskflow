@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Tarefa - TaskFlow</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #1e1e2e; color: #cdd6f4; min-height: 100vh; }
+        header { background: #313244; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #45475a; }
+        .logo { font-size: 22px; font-weight: bold; color: #cba6f7; }
+        nav a { color: #cdd6f4; text-decoration: none; margin-left: 24px; font-size: 14px; }
+        nav a:hover { color: #cba6f7; }
+        .container { max-width: 600px; margin: 40px auto; padding: 0 24px; }
+        h2 { font-size: 22px; margin-bottom: 24px; color: #cba6f7; }
+        .form-card { background: #313244; border-radius: 12px; padding: 32px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 13px; color: #a6adc8; margin-bottom: 8px; }
+        input, select, textarea {
+            width: 100%;
+            background: #45475a;
+            border: 1px solid #585b70;
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #cdd6f4;
+            font-size: 14px;
+            outline: none;
+        }
+        input:focus, select:focus, textarea:focus { border-color: #cba6f7; }
+        textarea { height: 100px; resize: vertical; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; text-decoration: none; display: inline-block; }
+        .btn-green { background: #a6e3a1; color: #1e1e2e; }
+        .btn-gray { background: #45475a; color: #cdd6f4; }
+        .btn:hover { opacity: 0.85; }
+        .form-actions { display: flex; gap: 12px; margin-top: 24px; }
+        select option { background: #313244; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">🚀 TaskFlow</div>
+    <nav>
+        <a th:href="@{/}">Tarefas</a>
+        <a th:href="@{/estatisticas}">Estatísticas</a>
+        <a th:href="@{/login}">Login</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>✏️ Editar Tarefa</h2>
+
+    <div class="form-card">
+        <form th:action="@{/atualizar/{id}(id=${task.id})}" method="post">
+
+            <div class="form-group">
+                <label>Título da tarefa</label>
+                <input type="text" name="titulo" th:value="${task.titulo}" required/>
+            </div>
+
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea name="descricao" th:text="${task.descricao}"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Horário início</label>
+                    <input type="number" name="horarioInicio" th:value="${task.horarioInicio}" required/>
+                </div>
+                <div class="form-group">
+                    <label>Horário fim</label>
+                    <input type="number" name="horarioFim" th:value="${task.horarioFim}" required/>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Ordem de urgência</label>
+                    <select name="ordemUrgencia">
+                        <option value="Muito Urgente" th:selected="${task.ordemUrgencia == 'Muito Urgente'}">🔴 Muito Urgente</option>
+                        <option value="Urgente" th:selected="${task.ordemUrgencia == 'Urgente'}">🟠 Urgente</option>
+                        <option value="Normal" th:selected="${task.ordemUrgencia == 'Normal'}">🔵 Normal</option>
+                        <option value="Pouco Urgente" th:selected="${task.ordemUrgencia == 'Pouco Urgente'}">🟢 Pouco Urgente</option>
+                        <option value="Nada Urgente" th:selected="${task.ordemUrgencia == 'Nada Urgente'}">⚪ Nada Urgente</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Cor</label>
+                    <select name="cor">
+                        <option value="Vermelho" th:selected="${task.cor == 'Vermelho'}">🔴 Vermelho</option>
+                        <option value="Laranja" th:selected="${task.cor == 'Laranja'}">🟠 Laranja</option>
+                        <option value="Azul" th:selected="${task.cor == 'Azul'}">🔵 Azul</option>
+                        <option value="Verde" th:selected="${task.cor == 'Verde'}">🟢 Verde</option>
+                        <option value="Roxo" th:selected="${task.cor == 'Roxo'}">🟣 Roxo</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-green">✅ Salvar alterações</button>
+                <a th:href="@{/}" class="btn btn-gray">❌ Cancelar</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
