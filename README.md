@@ -1,34 +1,46 @@
-TaskFlow
+# TaskFlow
 
-Basicamente é um gerenciador de tarefas em CLI que criei em Java. A ideia é organizar e priorizar tarefas de forma automática. Tá bem no começo ainda, mas já tá funcionando com banco de dados e tudo.
+Gerenciador de tarefas em linha de comando (CLI) desenvolvido em Java, com persistência em SQLite. O sistema organiza e prioriza tarefas automaticamente, associando cada uma a um usuário.
 
- Como funciona?
+## Funcionalidades
 
-Você cria tarefas, atribui pra usuários, e o sistema faz o gerenciamento no banco pra você. Nada muito complexo, mas é um bom exercício de Java com orientação a objetos mesmo.
+- Criação e gerenciamento de tarefas via CLI
+- Atribuição de tarefas a usuários
+- Priorização automática com base nos padrões de uso
+- Persistência de dados com SQLite
 
-Tecnologias
+## Tecnologias
 
-Java, Maven, SQLite, Eclipse JEE. 
+- Java
+- Maven
+- SQLite
+- Eclipse JEE
 
+## Como executar
 
- Pra rodar
-
-
-   git bash
-git clone https://github.com/fattorigloria-eng/taskflow.git
+```bash
+git clone https://github.com/fattorelligloria-eng/taskflow.git
 cd taskflow
 mvn clean compile
 mvn exec:java -Dexec.mainClass="com.taskflow.Main"
+```
 
+Ou importe o projeto no Eclipse e execute a classe `Main`.
 
-Ou só abre no Eclipse e roda direto.
+## Estrutura do projeto
 
+Cada classe tem uma responsabilidade única:
 
-Cada classe tem sua responsabilidade. Task cuida da tarefas, User cuida dos usuários, TaskManager orquestra tudo, DatabaseManager faz a conexão com o SQLite.
+- `Task` — representação e regras das tarefas
+- `User` — representação dos usuários
+- `TaskManager` — orquestra a lógica de negócio
+- `DatabaseManager` — conexão e operações com o SQLite
 
- 
+## 🇬🇧 About (English)
 
-Dúvidas ou sugestões? Me chama:
+TaskFlow is a command-line task manager built with Java, Maven and SQLite. It organizes and prioritizes tasks automatically, assigning them to users. Personal project built during my Software Engineering degree to practice OOP, data persistence and clean code.
 
- fattorelligloria@gmail.com  
-https://www.linkedin.com/in/glóriafattorellicarrion
+## Contato
+
+- LinkedIn: [linkedin.com/in/gloriafattorelli](https://www.linkedin.com/in/gloriafattorelli)
+- E-mail: fattorelligloria@gmail.com
